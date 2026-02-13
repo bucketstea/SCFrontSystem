@@ -1,3 +1,4 @@
+Attribute VB_Name = "exportAll"
 Option Explicit
 
 Public Sub ExportAllModules()
@@ -13,7 +14,7 @@ Public Sub ExportAllModules()
     For Each comp In vbProj.VBComponents
         Select Case comp.Type
             Case vbext_ct_StdModule, vbext_ct_ClassModule, vbext_ct_MSForm, vbext_ct_Document
-                comp.Export outDir & comp.Name & ModuleExt(comp.Type)
+                comp.Export outDir & comp.name & ModuleExt(comp.Type)
         End Select
     Next
     
