@@ -32,7 +32,6 @@ Public Const COL_LAST  As Long = 22
 'シートオブジェクト
 Public InputSh As Worksheet
 
-
 Public Sub dispFrontData()
     init
     
@@ -41,11 +40,33 @@ Public Sub dispFrontData()
 '    Unload Splash
     
     'メイン画面表示
-    showStart FrontDataDisp
+    showStart HomeDisp
 End Sub
 
 Public Sub init()
     Set InputSh = ThisWorkbook.Sheets("入力シート")
+    If InputSh.ProtectContents Then InputSh.Unprotect "042595"
+    
+    InputSh.Columns(COL_TEL).Select
+    Selection.NumberFormat = "@"
+    Call replaceAllLineBreaks
+    
+    If Not InputSh.ProtectContents Then InputSh.Protect "042595"
+End Sub
+'改行除去
+Private Sub replaceAllLineBreaks()
+    Cells.Replace what:=Chr(10), replacement:="", _
+                  lookat:=xlPart, _
+                  searchorder:=xlByRows, _
+                  MatchCase:=False
+End Sub
+
+Public Sub clearingForms()
+    Dim uf As Object
+    For Each uf In VBA.UserForms
+        Unload uf
+    Next uf
+    Set uf = Nothing
 End Sub
 
 'ヘッダー取得
@@ -72,7 +93,7 @@ Public Function getArrBody(ByVal dd As Date) As Variant
         Dim i As Long
         For i = LBound(arrBodyAtDate, 1) To UBound(arrBodyAtDate, 1)
             arrBodyAtDate(i, COL_TIME) = Format(arrBodyAtDate(i, COL_TIME), "hh:mm")
-        Next
+        Next i
     End If
     
     'return
