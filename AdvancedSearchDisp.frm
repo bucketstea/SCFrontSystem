@@ -6,7 +6,7 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} AdvancedSearchDisp
    ClientTop       =   -984
    ClientWidth     =   3408
    OleObjectBlob   =   "AdvancedSearchDisp.frx":0000
-   StartUpPosition =   1  'ƒI[ƒi[ ƒtƒH[ƒ€‚Ì’†‰›
+   StartUpPosition =   1  'ã‚ªãƒ¼ãƒŠãƒ¼ ãƒ•ã‚©ãƒ¼ãƒ ã®ä¸­å¤®
 End
 Attribute VB_Name = "AdvancedSearchDisp"
 Attribute VB_GlobalNameSpace = False
@@ -18,11 +18,13 @@ Option Base 1
 
 Private Sub UserForm_Initialize()
     Call UiConfig_AdvancedSearchDisp.configUiDesign(Me)
+
 End Sub
 
 '///////////////////////////////////////////////////////////
-'‘JˆÚŒnƒ{ƒ^ƒ“‘€ì
+'é·ç§»ç³»ãƒœã‚¿ãƒ³æ“ä½œ
 '///////////////////////////////////////////////////////////
 Private Sub LabelBack_Click()
     Me.Hide
 End Sub
+
