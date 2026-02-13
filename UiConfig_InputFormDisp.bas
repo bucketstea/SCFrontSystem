@@ -40,7 +40,7 @@ Private Sub configLabelName(ByRef InputFormDisp As Object)
         .LabelTime.Caption = "labeltime"
         .LabelName.Caption = "labelname"
         .LabelTel.Caption = "labeltel"
-        .LabelNg.Caption = "LabelNG"
+        .LabelNG.Caption = "LabelNG"
         .LabelNotes.Caption = "labelnotes"
         .LabelCast.Caption = "labelcast"
         .LabelCourse.Caption = "labelcourse"
@@ -368,7 +368,7 @@ Private Sub configSizePosition(ByRef InputFormDisp As Object)
             .Font.Size = 8
         End With
         'NG
-        With .LabelNg
+        With .LabelNG
             .Top = 156
             .Left = 474
             .Height = 18

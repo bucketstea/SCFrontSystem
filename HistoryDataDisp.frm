@@ -37,8 +37,13 @@ Private Sub UserForm_Initialize()
 End Sub
 
 '///////////////////////////////////////////////////////////
-'ボタン操作系遷移
+'遷移系ボタン操作
 '///////////////////////////////////////////////////////////
+'戻る
+Private Sub LabelBack_Click()
+    Me.Hide
+    navigateTo HomeDisp
+End Sub
 'タブ切替
 Private Sub LabelTab1_Click()
     Me.Hide
@@ -141,6 +146,14 @@ Private Sub ListView1_dblClick()
     
     navigateTo CustomerDetailDisp
 End Sub
+
+'閉じるボタン_フォームオブジェクトクリア
+Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
+    If CloseMode = vbFormControlMenu Then
+        Call DispMod.clearingForms
+    End If
+End Sub
+
 '///////////////////////////////////////////////////////////
 '見た目系の反応（非遷移系操作）
 '///////////////////////////////////////////////////////////
