@@ -25,8 +25,8 @@ Private Function ModuleExt(t As VBIDE.vbext_ComponentType) As String
     Select Case t
         Case vbext_ct_StdModule:  ModuleExt = ".bas"
         Case vbext_ct_ClassModule: ModuleExt = ".cls"
-        Case vbext_ct_MSForm:     ModuleExt = ".frm" ' .frxも一緒に出ます
-        Case vbext_ct_Document:   ModuleExt = ".cls" ' ThisWorkbook/Sheet等
+        Case vbext_ct_MSForm:     ModuleExt = ".frm" ' .frx�
+        Case vbext_ct_Document:   ModuleExt = ".cls" ' ThisWorkbook/Sheet
         Case Else:                ModuleExt = ".txt"
     End Select
 End Function

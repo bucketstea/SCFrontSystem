@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} InspectionDisp 
    Caption         =   "UserForm1"
-   ClientHeight    =   1932
-   ClientLeft      =   84
-   ClientTop       =   372
-   ClientWidth     =   17760
+   ClientHeight    =   1128
+   ClientLeft      =   12
+   ClientTop       =   84
+   ClientWidth     =   9084.001
    OleObjectBlob   =   "InspectionDisp.frx":0000
    StartUpPosition =   1  'オーナー フォームの中央
 End
@@ -27,6 +27,15 @@ Private Const IDC_HAND = 32649
 Private Sub UserForm_Initialize()
     Call UiConfig_InspectionDisp.configUiDesign(Me)
 End Sub
+
+'///////////////////////////////////////////////////////////
+'遷移系ボタン操作
+'///////////////////////////////////////////////////////////
+'戻る
+Private Sub LabelBack_Click()
+    Me.Hide
+    navigateTo HomeDisp
+End Sub
 'タブ切替
 Private Sub LabelTab1_Click()
     Me.Hide
@@ -48,6 +57,18 @@ Private Sub LabelTab5_Click()
     Me.Hide
     navigateTo ClosingDisp
 End Sub
+
+Private Sub CommandButton1_Click()
+    
+End Sub
+
+'閉じるボタン_フォームオブジェクトクリア
+Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
+    If CloseMode = vbFormControlMenu Then
+        Call DispMod.clearingForms
+    End If
+End Sub
+
 '///////////////////////////////////////////////////////////
 '見た目系の反応（非遷移系操作）
 '///////////////////////////////////////////////////////////

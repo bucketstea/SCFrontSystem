@@ -20,7 +20,7 @@ Private Sub configLabelName(CustomerDetailDisp)
         .LabelTel.Caption = "Tel:"
         .LabelRoot.Caption = "Root:"
         .LabelCt.Caption = "Ct:"
-        .LabelNg.Caption = "Ng:"
+        .LabelNG.Caption = "Ng:"
         .LabelNotes.Caption = "Notes:"
         
         .CommandButtonAdd.Caption = "Add New"
@@ -80,7 +80,7 @@ Private Sub configSizePosition(CustomerDetailDisp)
             .Font.Size = 14
             .Font.Bold = True
         End With
-        With .LabelNg
+        With .LabelNG
             .Left = 402
             .Top = 30
             .Height = 58

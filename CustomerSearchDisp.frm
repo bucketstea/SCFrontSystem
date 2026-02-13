@@ -16,6 +16,10 @@ Attribute VB_Exposed = False
 Option Explicit
 Option Base 1
 
+'======================
+'モーダル表示フォーム
+'======================
+
 'ListViewのクラス宣言
 Private drawer As New ListViewDrawer
 

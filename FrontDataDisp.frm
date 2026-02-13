@@ -13,7 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
 Option Explicit
 Option Base 1
 
@@ -126,8 +125,13 @@ Private Sub LabelDate_Click()
 End Sub
 
 '///////////////////////////////////////////////////////////
-'ボタン操作系遷移
+'遷移系ボタン操作
 '///////////////////////////////////////////////////////////
+'戻る
+Private Sub LabelBack_Click()
+    Me.Hide
+    navigateTo HomeDisp
+End Sub
 '新規入力ボタン
 Private Sub CommandButtonInput_Click()
     Me.Hide
@@ -169,6 +173,13 @@ Private Sub ListView1_dblClick()
     )
     
     navigateTo InputFormDisp
+End Sub
+
+'閉じるボタン_フォームオブジェクトクリア
+Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
+    If CloseMode = vbFormControlMenu Then
+        Call DispMod.clearingForms
+    End If
 End Sub
 
 '///////////////////////////////////////////////////////////
