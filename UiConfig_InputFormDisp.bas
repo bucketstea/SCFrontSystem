@@ -40,7 +40,7 @@ Private Sub configLabelName(ByRef InputFormDisp As Object)
         .LabelTime.Caption = "labeltime"
         .LabelName.Caption = "labelname"
         .LabelTel.Caption = "labeltel"
-        .LabelNG.Caption = "LabelNG"
+        .LabelNg.Caption = "LabelNG"
         .LabelNotes.Caption = "labelnotes"
         .LabelCast.Caption = "labelcast"
         .LabelCourse.Caption = "labelcourse"
@@ -287,6 +287,16 @@ Private Sub configSizePosition(ByRef InputFormDisp As Object)
             .BackColor = &H8000000E
             .ForeColor = &H80000010
         End With
+        With .LabelErrorTime
+            .Top = 120
+            .Left = 624
+            .Height = 12
+            .Width = 84
+            .ForeColor = &HFF&
+            .Visible = False
+            .Font.name = "Yu Gothic UI"
+            .Font.Size = 8
+        End With
         'Name“ü—Í
         With .LabelName
             .Top = 156
@@ -368,7 +378,7 @@ Private Sub configSizePosition(ByRef InputFormDisp As Object)
             .Font.Size = 8
         End With
         'NG
-        With .LabelNG
+        With .LabelNg
             .Top = 156
             .Left = 474
             .Height = 18

@@ -109,7 +109,7 @@ End Sub
 Private Sub CommandButtonChange_Click()
     If TextBoxName.Text = nameVal And TextBoxTel.Text = telVal Then
         MsgBox prompt:="「名前」と「番号」入力欄に変更がありません。" & vbCrLf & vbCrLf & _
-                       "このボタンから、現在表示中のユーザーの履歴データの「名前」と「番号」を一括変更できます。", _
+                       "このボタンから、現在表示中のユーザーの全履歴の「名前」と「番号」を一括変更できます。", _
                Buttons:=vbInformation, Title:="機能Help"
         Exit Sub
     End If

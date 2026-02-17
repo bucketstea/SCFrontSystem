@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} InputFormDisp 
    Caption         =   "データ入力"
-   ClientHeight    =   5760
-   ClientLeft      =   -3216
-   ClientTop       =   -13104
-   ClientWidth     =   14592
+   ClientHeight    =   3756
+   ClientLeft      =   -3252
+   ClientTop       =   -13296
+   ClientWidth     =   9528.001
    OleObjectBlob   =   "InputFormDisp.frx":0000
    StartUpPosition =   1  'オーナー フォームの中央
 End
@@ -319,7 +319,17 @@ Private Function validateInputs() As Boolean
         LabelErrorType.Visible = True
         result = False
     Else
-        LabelErrorAd.Visible = False
+        LabelErrorType.Visible = False
+    End If
+    
+    'Time
+    Dim errTime As String: errTime = apiValidate(TextBoxTime.Text, Array("required"))
+    If errTime = "" Then
+        LabelErrorTime.Visible = False
+    Else
+        LabelErrorTime.Caption = errTime
+        LabelErrorTime.Visible = True
+        result = False
     End If
     
     'Name
