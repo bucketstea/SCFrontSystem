@@ -287,6 +287,16 @@ Private Sub configSizePosition(ByRef InputFormDisp As Object)
             .BackColor = &H8000000E
             .ForeColor = &H80000010
         End With
+        With .LabelErrorTime
+            .Top = 120
+            .Left = 624
+            .Height = 12
+            .Width = 84
+            .ForeColor = &HFF&
+            .Visible = False
+            .Font.name = "Yu Gothic UI"
+            .Font.Size = 8
+        End With
         'Name“ü—Í
         With .LabelName
             .Top = 156

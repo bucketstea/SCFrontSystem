@@ -12,11 +12,15 @@ Public Sub ExportAllModules()
     Set vbProj = ThisWorkbook.VBProject
     
     For Each comp In vbProj.VBComponents
+        If InStr(comp.name, "Sheet") > 0 Then GoTo Continue
+        If InStr(comp.name, "ThisWorkbook") > 0 Then GoTo Continue
+        
         Select Case comp.Type
             Case vbext_ct_StdModule, vbext_ct_ClassModule, vbext_ct_MSForm, vbext_ct_Document
                 comp.Export outDir & comp.name & ModuleExt(comp.Type)
         End Select
-    Next
+Continue:
+    Next comp
     
     MsgBox "Exported to: " & outDir
 End Sub
@@ -25,8 +29,9 @@ Private Function ModuleExt(t As VBIDE.vbext_ComponentType) As String
     Select Case t
         Case vbext_ct_StdModule:  ModuleExt = ".bas"
         Case vbext_ct_ClassModule: ModuleExt = ".cls"
-        Case vbext_ct_MSForm:     ModuleExt = ".frm" ' .frxも一緒に出ます
-        Case vbext_ct_Document:   ModuleExt = ".cls" ' ThisWorkbook/Sheet等
+        Case vbext_ct_MSForm:     ModuleExt = ".frm" ' .frx�E
+        Case vbext_ct_Document:   ModuleExt = ".cls" ' ThisWorkbook/Sheet
         Case Else:                ModuleExt = ".txt"
     End Select
 End Function
+

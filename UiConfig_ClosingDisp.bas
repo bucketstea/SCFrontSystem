@@ -21,6 +21,8 @@ Private Sub configLabelName(Disp)
         .LabelTab3.Caption = "Checking"
         .LabelTab4.Caption = "Inspection"
         .LabelTab5.Caption = "Closing"
+        
+        .CommandButton1.Caption = "í˜Çﬂèàóù"
     End With
 End Sub
 
@@ -98,6 +100,18 @@ Private Sub configSizePosition(Disp)
             .Font.Bold = True
             .BackColor = RGB(68, 114, 196)
             .ForeColor = RGB(255, 255, 255)
+        End With
+        
+        With .CommandButton1
+            .Top = 150
+            .Height = 30
+            .Left = 450
+            .Width = 200
+            .Font.name = "Yu Gothic UI"
+            .Font.Size = 16
+            .Font.Bold = True
+            .BackColor = RGB(255, 255, 255)
+            .ForeColor = RGB(0, 0, 0)
         End With
     End With
 End Sub

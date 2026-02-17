@@ -96,6 +96,9 @@ End Sub
 '新規入力画面へ遷移する
 Private Sub CommandButtonAdd_Click()
     Me.Hide
+    Me.TextBoxName.Text = nameVal
+    Me.TextBoxTel.Text = telVal
+    
     Call InputFormDisp.reloadInputs(Date, _
                                     UBound(DispMod.getArrBody(Date), 1), _
                                     nameVal, _
@@ -106,7 +109,7 @@ End Sub
 Private Sub CommandButtonChange_Click()
     If TextBoxName.Text = nameVal And TextBoxTel.Text = telVal Then
         MsgBox prompt:="「名前」と「番号」入力欄に変更がありません。" & vbCrLf & vbCrLf & _
-                       "このボタンから、現在表示中のユーザーの履歴データの「名前」と「番号」を一括変更できます。", _
+                       "このボタンから、現在表示中のユーザーの全履歴の「名前」と「番号」を一括変更できます。", _
                Buttons:=vbInformation, Title:="機能Help"
         Exit Sub
     End If
@@ -163,6 +166,8 @@ Private Sub changeInformation(ByVal targetArr As Variant, _
                               ByVal name As String, _
                               ByVal tel As String)
     With InputSh
+        If .ProtectContents Then .Unprotect "042595"
+        
         Dim lastRow As Long: lastRow = .Cells(.Rows.Count, COL_A).End(xlUp).Row
         
         Dim i As Long
@@ -175,7 +180,17 @@ Private Sub changeInformation(ByVal targetArr As Variant, _
                 End If
             Next j
         Next i
+        
+        If Not .ProtectContents Then .Protect "042595"
+        
     End With
+End Sub
+
+'閉じるボタン_フォームオブジェクトクリア
+Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
+    If CloseMode = vbFormControlMenu Then
+        Call DispMod.clearingForms
+    End If
 End Sub
 
 'Labelのマウスオーバー関連(WindowsAPI使用)

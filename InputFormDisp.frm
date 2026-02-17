@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} InputFormDisp 
    Caption         =   "データ入力"
-   ClientHeight    =   9012.001
-   ClientLeft      =   -3168
-   ClientTop       =   -12936
-   ClientWidth     =   22824
+   ClientHeight    =   3756
+   ClientLeft      =   -3252
+   ClientTop       =   -13296
+   ClientWidth     =   9528.001
    OleObjectBlob   =   "InputFormDisp.frx":0000
    StartUpPosition =   1  'オーナー フォームの中央
 End
@@ -174,15 +174,22 @@ End Sub
 Private Sub ImageDelete_Click()
     If (MsgBox("Delete the data?", vbExclamation + vbYesNo, "Caution") = vbYes) Then
         
-        Dim targetrow As Long: targetrow = searchRowIndex(generalid)
+        Dim targetRow As Long: targetRow = searchRowIndex(generalid)
         
         '_del付与(削除レコード化する)
-        Call delToExcel(targetrow)
+        Call delToExcel(targetRow)
         
         Dim selectedDate As Date: selectedDate = CDate(parseYymmdd(Me.TextBoxDate.value))
+        Dim targetName As String: targetName = InputSh.Cells(targetRow, COL_CUSTM).value
+        Dim targetTel  As String:  targetTel = InputSh.Cells(targetRow, COL_TEL).value
         
+        'ListView表示更新処理
+        Call FrontDataDisp.FrontDataUpdate(selectedDate) 'Excelから読込直して受付画面のListView更新
+        Call CustomerDetailDisp.setupDetail(targetName, targetTel) '名前と番号で履歴詳細画面のListView更新
+        Call HistoryDataDisp.api_searchHistory(HistoryDataDisp.TextBoxFree.Text)
+        
+        '入力画面を閉じ、前の画面に戻る
         Me.Hide
-        FrontDataDisp.FrontDataUpdate selectedDate
         goBack
     End If
 End Sub
@@ -197,13 +204,14 @@ Private Sub CommandButtonSave_Click()
     newRow = collectInputData()
     
     'Excelに1行追記
-    Dim targetrow As Long: targetrow = searchRowIndex(generalid)
-    Call writeToExcel(newRow, targetrow)
+    Dim targetRow As Long: targetRow = searchRowIndex(generalid)
+    Call writeToExcel(newRow, targetRow)
     
     Dim selectedDate As Date: selectedDate = CDate(parseYymmdd(Me.TextBoxDate.value))
     
+    'ListView表示更新処理
     Call FrontDataDisp.FrontDataUpdate(selectedDate) 'Excelから読込直して受付画面のListView更新
-    Call CustomerDetailDisp.setupDetail(newRow(COL_CUSTM), newRow(COL_TEL)) '対象レコード渡して受付画面のListView更新
+    Call CustomerDetailDisp.setupDetail(newRow(COL_CUSTM), newRow(COL_TEL)) '名前と番号で履歴詳細画面のListView更新
     Call HistoryDataDisp.api_searchHistory(HistoryDataDisp.TextBoxFree.Text)
     
     '入力画面を閉じ、前の画面に戻る
@@ -311,7 +319,17 @@ Private Function validateInputs() As Boolean
         LabelErrorType.Visible = True
         result = False
     Else
-        LabelErrorAd.Visible = False
+        LabelErrorType.Visible = False
+    End If
+    
+    'Time
+    Dim errTime As String: errTime = apiValidate(TextBoxTime.Text, Array("required"))
+    If errTime = "" Then
+        LabelErrorTime.Visible = False
+    Else
+        LabelErrorTime.Caption = errTime
+        LabelErrorTime.Visible = True
+        result = False
     End If
     
     'Name
@@ -361,18 +379,27 @@ End Function
 '///////////////////////////////////////////////////////////
 'Excelに追記
 '///////////////////////////////////////////////////////////
-Private Sub writeToExcel(ByVal Data As Variant, ByVal targetrow As Long)
-    InputSh.Range(InputSh.Cells(targetrow, 1), InputSh.Cells(targetrow, UBound(Data))).value = Data
+Private Sub writeToExcel(ByVal Data As Variant, ByVal targetRow As Long)
+    
+    If InputSh.ProtectContents Then InputSh.Unprotect "042595"
+    
+    InputSh.Range(InputSh.Cells(targetRow, 1), InputSh.Cells(targetRow, UBound(Data))).value = Data
     
     'Telが0始まりで崩れる。配列データはCstrしているが、念のためセルの表示形式でも文字列に設定。
-    InputSh.Cells(targetrow, COL_TEL).NumberFormat = "@"
+    InputSh.Cells(targetRow, COL_TEL).NumberFormat = "@"
+    
+    If Not InputSh.ProtectContents Then InputSh.Protect "042595"
     
     ThisWorkbook.Save 'ブック保存しておく
 End Sub
-Private Sub delToExcel(ByVal targetrow As Long)
-    InputSh.Cells(targetrow, COL_A).value = InputSh.Cells(targetrow, COL_A).value & "_del"
-    InputSh.Cells(targetrow, COL_DATE).value = InputSh.Cells(targetrow, COL_DATE).value & "_del"
+Private Sub delToExcel(ByVal targetRow As Long)
+    If InputSh.ProtectContents Then InputSh.Unprotect "042595"
+    
+    InputSh.Cells(targetRow, COL_A).value = InputSh.Cells(targetRow, COL_A).value & "_del"
+    InputSh.Cells(targetRow, COL_DATE).value = InputSh.Cells(targetRow, COL_DATE).value & "_del"
     ThisWorkbook.Save 'ブック保存しておく
+    
+    If Not InputSh.ProtectContents Then InputSh.Protect "042595"
 End Sub
 
 '///////////////////////////////////////////////////////////
@@ -579,6 +606,13 @@ End Sub
 'SB欄をクリック_TextBox
 Private Sub TextBoxSB_Enter()
     PlaceholderSB.Visible = False
+End Sub
+
+'閉じるボタン_フォームオブジェクトクリア
+Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
+    If CloseMode = vbFormControlMenu Then
+        Call DispMod.clearingForms
+    End If
 End Sub
 
 'Labelのマウスオーバー関連(WindowsAPI使用)

@@ -33,11 +33,12 @@ Public Const COL_LAST  As Long = 22
 Public InputSh As Worksheet
 
 Public Sub dispFrontData()
-    init
-    
     'スプラッシュ画面表示
-'    Splash.Show vbModeless: DoEvents: Application.Wait Now + TimeValue("0:00:01")
-'    Unload Splash
+    Splash.Show vbModeless: DoEvents: Application.Wait Now + TimeValue("0:00:00")
+    
+    Call init
+    
+    Unload Splash
     
     'メイン画面表示
     showStart HomeDisp
@@ -47,18 +48,29 @@ Public Sub init()
     Set InputSh = ThisWorkbook.Sheets("入力シート")
     If InputSh.ProtectContents Then InputSh.Unprotect "042595"
     
-    InputSh.Columns(COL_TEL).Select
-    Selection.NumberFormat = "@"
     Call replaceAllLineBreaks
     
     If Not InputSh.ProtectContents Then InputSh.Protect "042595"
 End Sub
 '改行除去
 Private Sub replaceAllLineBreaks()
-    Cells.Replace what:=Chr(10), replacement:="", _
-                  lookat:=xlPart, _
-                  searchorder:=xlByRows, _
-                  MatchCase:=False
+    Dim c As Range
+    Dim s As String
+
+    For Each c In ActiveSheet.UsedRange.Cells
+        If Not IsError(c.value) Then
+            s = CStr(c.value)
+            
+            If InStr(s, vbLf) > 0 Or InStr(s, vbCr) > 0 Then
+                c.NumberFormat = "@"
+                
+                s = Replace(s, vbCr, "")
+                s = Replace(s, vbLf, "")
+                
+                c.value = s
+            End If
+        End If
+    Next c
 End Sub
 
 Public Sub clearingForms()
@@ -131,13 +143,13 @@ Private Function getDayRangeArray(ByVal arrBody As Variant, _
         getDayRangeArray = Empty 'return
     Else
         Dim resultArr As Variant: ReDim resultArr(1 To resultColl.Count, lowerColumn To upperColumn)
-        Dim targetrow As Long: targetrow = 1 '下から取った配列を上から詰めなおすためiとtargetRowを分けている
+        Dim targetRow As Long: targetRow = 1 '下から取った配列を上から詰めなおすためiとtargetRowを分けている
         For i = resultColl.Count To 1 Step -1
             rowArr = resultColl(i)
             For j = lowerColumn To upperColumn
-                resultArr(targetrow, j) = rowArr(j)
+                resultArr(targetRow, j) = rowArr(j)
             Next j
-            targetrow = targetrow + 1
+            targetRow = targetRow + 1
         Next i
         getDayRangeArray = resultArr 'return
     End If
