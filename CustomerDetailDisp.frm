@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} CustomerDetailDisp 
    Caption         =   "UserForm1"
-   ClientHeight    =   48
-   ClientLeft      =   -324
-   ClientTop       =   -1056
-   ClientWidth     =   60
+   ClientHeight    =   732
+   ClientLeft      =   -360
+   ClientTop       =   -1308
+   ClientWidth     =   1692
    OleObjectBlob   =   "CustomerDetailDisp.frx":0000
    StartUpPosition =   1  'オーナー フォームの中央
 End
@@ -40,7 +40,7 @@ Public Sub setupDetail(ByVal targetName As String, ByVal targetTel As String)
     nameVal = targetName
     telVal = targetTel
     If nameVal = "" Or telVal = "" Then Exit Sub
-    targetArr = searchByNameAndTel(nameVal, telVal)
+    targetArr = quickSort2dByColumn(searchByNameAndTel(nameVal, telVal), COL_DATE, "DESC")
     
     Me.TextBoxName.Text = nameVal
     Me.TextBoxTel.Text = telVal
@@ -76,6 +76,7 @@ Private Function joinStrByCol(ByVal targetArr As Variant, _
     Dim i As Long
     For i = LBound(targetArr, 1) To UBound(targetArr, 1)
         If i <> LBound(targetArr, 1) _
+        And resultStr <> "" _
         And targetArr(i, targetCol) <> "" Then
             resultStr = resultStr & ", "
         End If
@@ -99,8 +100,12 @@ Private Sub CommandButtonAdd_Click()
     Me.TextBoxName.Text = nameVal
     Me.TextBoxTel.Text = telVal
     
+    Dim todaysArr As Variant: todaysArr = DispMod.getArrBody(Date)
+    Dim arrSize As Long: arrSize = 0
+    If Not IsEmpty(todaysArr) Then arrSize = UBound(todaysArr, 1)
+    
     Call InputFormDisp.reloadInputs(Date, _
-                                    UBound(DispMod.getArrBody(Date), 1), _
+                                    arrSize, _
                                     nameVal, _
                                     telVal)
     navigateTo InputFormDisp

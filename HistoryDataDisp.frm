@@ -72,7 +72,8 @@ End Sub
 Private Sub CommandButtonSearch_Click()
     Dim targetstr As String: targetstr = TextBoxFree.Text
     If targetstr = "" Then Exit Sub
-    Dim targetArr As Variant: targetArr = searchFromAllByFreeword(targetstr)
+    Dim targetArr As Variant
+    targetArr = quickSort2dByColumn(searchFromAllByFreeword(targetstr), COL_DATE, "DESC")
     
     'ListView用クラスのインスタンス生成
     Set drawer = New ListViewDrawer
