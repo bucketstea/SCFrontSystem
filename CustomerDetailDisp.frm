@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} CustomerDetailDisp 
    Caption         =   "UserForm1"
-   ClientHeight    =   732
-   ClientLeft      =   -360
-   ClientTop       =   -1308
-   ClientWidth     =   1692
+   ClientHeight    =   180
+   ClientLeft      =   -432
+   ClientTop       =   -1812
+   ClientWidth     =   420
    OleObjectBlob   =   "CustomerDetailDisp.frx":0000
    StartUpPosition =   1  'オーナー フォームの中央
 End
@@ -21,6 +21,7 @@ Private drawer As ListViewDrawer
 
 Private nameVal As String
 Private telVal As String
+Private rootVal As String
 Private targetArr As Variant
 
 '/////////////////////////////////////////////////////////// Windows API の宣言
@@ -41,10 +42,11 @@ Public Sub setupDetail(ByVal targetName As String, ByVal targetTel As String)
     telVal = targetTel
     If nameVal = "" Or telVal = "" Then Exit Sub
     targetArr = quickSort2dByColumn(searchByNameAndTel(nameVal, telVal), COL_DATE, "DESC")
+    rootVal = targetArr(UBound(targetArr, 1), COL_ROOT)
     
     Me.TextBoxName.Text = nameVal
     Me.TextBoxTel.Text = telVal
-    Me.LabelRootVal.Caption = targetArr(LBound(targetArr, 1), COL_ROOT)
+    Me.LabelRootVal.Caption = rootVal
     Me.LabelCtVal.Caption = UBound(targetArr, 1)
     Me.LabelNgVal.Caption = joinStrByCol(targetArr, COL_NG)
     Me.LabelNotesVal.Caption = joinStrByCol(targetArr, COL_NOTE)
