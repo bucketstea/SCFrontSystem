@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} Splash 
    Caption         =   "S-Kore front system"
-   ClientHeight    =   924
-   ClientLeft      =   72
-   ClientTop       =   204
-   ClientWidth     =   2676
+   ClientHeight    =   732
+   ClientLeft      =   48
+   ClientTop       =   108
+   ClientWidth     =   2136
    OleObjectBlob   =   "Splash.frx":0000
    StartUpPosition =   1  'オーナー フォームの中央
 End
@@ -16,8 +16,7 @@ Attribute VB_Exposed = False
 Option Explicit
 'スプラッシュ表示
 'なんかやってそうな見た目
-'だけど見た目だけで、実際は何もしない(プロトタイプ開発時点)
-'何か予備処理など必要なことあればここに実装したい
+'何か予備処理など必要なことあればこれをcallする前後に
 Private Sub UserForm_Activate()
     Dim i As Long
     Dim dots As String
@@ -31,7 +30,7 @@ Private Sub UserForm_Activate()
 End Sub
 Private Sub UserForm_Initialize()
     With Me
-        .Caption = "S-Kore Front System"
+        .Caption = "S-Core Front System"
         .Height = 100
         .Width = 180
         With lblstatus

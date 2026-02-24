@@ -219,21 +219,21 @@ Private Sub CommandButtonSave_Click()
     goBack
 End Sub
 Private Function searchRowIndex(ByVal editID As String) As Long
-    Dim ws As Worksheet: Set ws = ThisWorkbook.Sheets("入力シート")
-    
-    If Not isEditMode Then
-        searchRowIndex = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row + 1
-        Exit Function
-    End If
-    
-    Dim arr As Variant: arr = ws.Columns(1).value
-    Dim i As Long
-    For i = UBound(arr, 1) To LBound(arr, 1) Step -1
-        If arr(i, 1) = editID Then
-            searchRowIndex = i
+    With InputSh
+        If Not isEditMode Then
+            searchRowIndex = .Cells(.Rows.Count, 1).End(xlUp).Row + 1
             Exit Function
         End If
-    Next i
+        
+        Dim arr As Variant: arr = .Columns(1).value
+        Dim i As Long
+        For i = UBound(arr, 1) To LBound(arr, 1) Step -1
+            If arr(i, 1) = editID Then
+                searchRowIndex = i
+                Exit Function
+            End If
+        Next i
+    End With
 End Function
 
 '検索ボタン

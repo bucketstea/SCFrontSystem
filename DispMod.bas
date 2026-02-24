@@ -57,7 +57,7 @@ Private Sub replaceAllLineBreaks()
     Dim c As Range
     Dim s As String
 
-    For Each c In ActiveSheet.UsedRange.Cells
+    For Each c In InputSh.UsedRange.Cells
         If Not IsError(c.value) Then
             s = CStr(c.value)
             
@@ -83,7 +83,6 @@ End Sub
 
 'ヘッダー取得
 Public Function getArrHeader() As Variant
-    Dim InputSh As Worksheet: Set InputSh = ThisWorkbook.Sheets("入力シート")
     Dim arrHeader As Variant
     arrHeader = InputSh.Range(InputSh.Cells(1, COL_A), InputSh.Cells(1, COL_LAST)).value
     
@@ -93,7 +92,6 @@ End Function
 
 'データボディ取得
 Public Function getArrBody(ByVal dd As Date) As Variant
-    Dim InputSh As Worksheet: Set InputSh = ThisWorkbook.Sheets("入力シート")
     Dim lastRow As Long
     lastRow = InputSh.Cells(InputSh.Rows.Count, COL_DATE).End(xlUp).Row
     Dim arrBodyAll As Variant
@@ -119,7 +117,6 @@ End Function
 '///////////////////////////////////////////////////////////
 Private Function getDayRangeArray(ByVal arrBody As Variant, _
                                   ByVal dd As Date) As Variant
-    Dim InputSh As Worksheet: Set InputSh = ThisWorkbook.Sheets("入力シート")
     Dim i As Long, j As Long
     Dim strDateYymmdd As String: strDateYymmdd = Format(dd, "yymmdd")
     Dim lowerColumn As Long: lowerColumn = LBound(arrBody, 2)

@@ -58,10 +58,6 @@ Private Sub LabelTab5_Click()
 '    navigateTo ClosingDisp
 End Sub
 
-Private Sub CommandButton1_Click()
-    
-End Sub
-
 '閉じるボタン_フォームオブジェクトクリア
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
     If CloseMode = vbFormControlMenu Then
