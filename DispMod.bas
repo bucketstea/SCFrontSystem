@@ -46,6 +46,7 @@ End Sub
 
 Public Sub init()
     Set InputSh = ThisWorkbook.Sheets("入力シート")
+    
     If InputSh.ProtectContents Then InputSh.Unprotect "042595"
     
     Call replaceAllLineBreaks
@@ -125,7 +126,8 @@ Private Function getDayRangeArray(ByVal arrBody As Variant, _
     '下(最新)から線形探索して日付ヒットしたらコレクションに入れていく
     Dim resultColl As New Collection
     For i = UBound(arrBody, 1) To LBound(arrBody, 1) Step -1
-        If CStr(arrBody(i, COL_DATE)) = CStr(strDateYymmdd) Then
+        If CStr(arrBody(i, COL_DATE)) = CStr(strDateYymmdd) _
+        And Not Right(arrBody(i, COL_A), 4) = "_del" Then
             Dim rowArr As Variant
             ReDim rowArr(1 To upperColumn)
             For j = lowerColumn To upperColumn
@@ -259,6 +261,55 @@ Public Function summaryByCustom(ByVal arr As Variant) As Object
         End If
     Next i
     Set summaryByCustom = customDic
+End Function
+
+'///////////////////////////////////////////////////////////
+'新ID取得
+'///////////////////////////////////////////////////////////
+Public Function getNewId(lastRow) As Long
+    With InputSh
+        Dim result As Long
+       
+        Dim targetArr As Variant
+        targetArr = .Range(.Cells(2, COL_A), .Cells(lastRow, COL_A)).value
+        
+        Dim dic As Object: Set dic = CreateObject("Scripting.Dictionary")
+        Dim i As Long
+        For i = LBound(targetArr, 1) To UBound(targetArr, 1)
+            If Not dic.exists(targetArr(i, 1)) Then
+                dic.Add targetArr(i, 1), i
+            End If
+        Next i
+        
+        Dim j As Long
+        Dim idOk As Boolean
+        Do While Not idOk
+            If Not dic.exists(lastRow + j) Then
+                idOk = True
+                getNewId = lastRow + j
+            End If
+            j = j + 1
+        Loop
+    End With
+End Function
+
+'///////////////////////////////////////////////////////////
+'回数取得
+'///////////////////////////////////////////////////////////
+Public Function getCt(name, tel)
+    Call CustomerDetailDisp.setupDetail(name, tel)
+    getCt = CustomerDetailDisp.ListView1.ListItems.Count + 1
+End Function
+
+'///////////////////////////////////////////////////////////
+'新規か否か判定
+'///////////////////////////////////////////////////////////
+Public Function isNew(ct) As String
+    If ct = 1 Then
+        isNew = "〇"
+    Else
+        isNew = "-"
+    End If
 End Function
 
 '///////////////////////////////////////////////////////////

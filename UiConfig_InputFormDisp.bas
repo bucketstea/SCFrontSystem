@@ -6,65 +6,56 @@ Option Base 1
 'UI初期化_定義
 '///////////////////////////////////////////////////////////
 Public Sub configUiDesign(ByRef InputFormDisp As Object)
-    'コントロールUI生成
-'    Call addUi(InputFormDisp)
-    
     '文字列系の設定用Helper
     Call configLabelName(InputFormDisp)
     
     'サイズや位置など設定用Helper
     Call configSizePosition(InputFormDisp)
 End Sub
-Private Sub addUi(ByRef InputFormDisp As Object)
-    With InputFormDisp
-'        .Controls.Add "Forms.Label.1", "LabelBase"
-'        .Controls.Add "Forms.Label.1", "LabelCustomer"
-'        .Controls.Add "Forms.Label.1", "LabelUse"
-'        .Controls.Add "Forms.Label.1", "LabelAccount"
-    End With
-End Sub
+
+'キャプション設定系
 Private Sub configLabelName(ByRef InputFormDisp As Object)
     With InputFormDisp
         .Caption = "データ入力画面"
         
         '大項目名
-        .LabelBase.Caption = "label1"
-        .LabelCustomer.Caption = "label2"
-        .LabelUse.Caption = "label3"
-        .LabelAccount.Caption = "label4"
+        .LabelBase.Caption = "受付情報"
+        .LabelCustomer.Caption = "顧客情報"
+        .LabelUse.Caption = "利用内容"
+        .LabelAccount.Caption = "金額"
         
         '各小項目名設定
         .LabelDate.Caption = "日付"
-        .LabelAd.Caption = "labelad"
-        .LabelType.Caption = "labeltype"
-        .LabelTime.Caption = "labeltime"
-        .LabelName.Caption = "labelname"
-        .LabelTel.Caption = "labeltel"
-        .LabelNg.Caption = "LabelNG"
-        .LabelNotes.Caption = "labelnotes"
-        .LabelCast.Caption = "labelcast"
-        .LabelCourse.Caption = "labelcourse"
-        .LabelService.Caption = "labelservice"
-        .LabelOP.Caption = "labelop"
-        .LabelDestination.Caption = "labeldestination"
-        .LabelExpand.Caption = "labelexpand"
-        .LabelSales.Caption = "labelsales"
-        .LabelCost.Caption = "labelcost"
-        .LabelProfit.Caption = "labelprofit"
-        .LabelQB.Caption = "labelqb"
-        .LabelSB.Caption = "labelsb"
+        .LabelAd.Caption = "経路"
+        .LabelType.Caption = "種別"
+        .LabelTime.Caption = "受付時刻"
+        .LabelName.Caption = "名前"
+        .LabelTel.Caption = "電話番号"
+        .LabelNg.Caption = "NG"
+        .LabelNotes.Caption = "備考"
+        .LabelCast.Caption = "キャスト名"
+        .LabelCourse.Caption = "利用時間"
+        .LabelService.Caption = "サービス"
+        .LabelOP.Caption = "OP"
+        .LabelDestination.Caption = "利用場所"
+        .LabelExpand.Caption = "延長"
+        .LabelSales.Caption = "総額"
+        .LabelCost.Caption = "女子分"
+        .LabelProfit.Caption = "売上"
+        .LabelQB.Caption = "アンケ等"
+        .LabelSB.Caption = "SB等(%)"
         
         'プレースホルダ
         .PlaceholderDate.Caption = Format(Date, "yymmdd")
         .PlaceholderTime.Caption = CStr(Format(Now, "hh:mm"))
         .PlaceholderName.Caption = "オガワアツシ"
         .PlaceholderTel.Caption = "09012345678"
-        .PlaceholderCast.Caption = "あつこ"
+        .PlaceholderCast.Caption = "しずか"
         .PlaceholderCourse.Caption = "60"
         .PlaceholderService.Caption = "service"
-        .PlaceholderOP.Caption = "op"
-        .PlaceholderDestination.Caption = "destination"
-        .PlaceholderExpand.Caption = "expand"
+        .PlaceholderOP.Caption = "OP"
+        .PlaceholderDestination.Caption = "ポ101"
+        .PlaceholderExpand.Caption = "20"
         .PlaceholderSales.Caption = "16000"
         .PlaceholderCost.Caption = "8000"
         .PlaceholderQB.Caption = "1000"
@@ -81,8 +72,42 @@ Private Sub configLabelName(ByRef InputFormDisp As Object)
         
         
         'その他
-        .CommandButtonSearchName.Caption = "search"
-        .CommandButtonSearchTel.Caption = "search"
+        .CommandButtonSearchName.Caption = "Search"
+        .CommandButtonSearchTel.Caption = "Search"
+    End With
+End Sub
+
+'コンボボックスリスト設定
+Public Sub configComboBox(ByRef InputFormDisp As Object)
+    With InputFormDisp
+        Dim adsList As Variant
+        adsList = Array("経路を選択", _
+                        "R", _
+                        "ad2", _
+                        "ad3", _
+                        "ad4", _
+                        "ad5", _
+                        "ad6", _
+                        "ad7", _
+                        "ad8", _
+                        "ad9", _
+                        "ad10")
+        Dim ad As Variant
+        For Each ad In adsList
+            .ComboBoxAd.AddItem ad
+        Next ad
+        
+        Dim typList As Variant
+        typList = Array("種別を選択", _
+                         "type1", _
+                         "type2", _
+                         "type3", _
+                         "type4", _
+                         "type5")
+        Dim typ As Variant
+        For Each typ In typList
+            .ComboBoxType.AddItem typ
+        Next typ
     End With
 End Sub
 
@@ -800,39 +825,6 @@ Private Sub configSizePosition(ByRef InputFormDisp As Object)
             .Font.Size = 11
             .BackColor = RGB(68, 114, 196)
         End With
-    End With
-End Sub
-
-Public Sub configComboBox(ByRef InputFormDisp As Object)
-    With InputFormDisp
-        Dim adsList As Variant
-        adsList = Array("経路を選択", _
-                        "ad1", _
-                        "ad2", _
-                        "ad3", _
-                        "ad4", _
-                        "ad5", _
-                        "ad6", _
-                        "ad7", _
-                        "ad8", _
-                        "ad9", _
-                        "ad10")
-        Dim ad As Variant
-        For Each ad In adsList
-            .ComboBoxAd.AddItem ad
-        Next ad
-        
-        Dim typList As Variant
-        typList = Array("種別を選択", _
-                         "type1", _
-                         "type2", _
-                         "type3", _
-                         "type4", _
-                         "type5")
-        Dim typ As Variant
-        For Each typ In typList
-            .ComboBoxType.AddItem typ
-        Next typ
     End With
 End Sub
 
