@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} HomeDisp 
    Caption         =   "UserForm1"
-   ClientHeight    =   2280
+   ClientHeight    =   10200
    ClientLeft      =   -12
    ClientTop       =   36
-   ClientWidth     =   1620
+   ClientWidth     =   5052
    OleObjectBlob   =   "HomeDisp.frx":0000
    StartUpPosition =   1  'オーナー フォームの中央
 End
@@ -25,11 +25,11 @@ Private Sub UserForm_Initialize()
         .Width = 300
         
         .Caption = "ホーム画面"
-        .CommandButtonFront.Caption = "Front"
-        .CommandButtonHistory.Caption = "History"
-        .CommandButtonChecking.Caption = "Checking"
-        .CommandButtonInspection.Caption = "Inspection"
-        .CommandButtonClosing.Caption = "Closing"
+        .CommandButtonFront.Caption = "一覧データ"
+        .CommandButtonHistory.Caption = "履歴検索"
+        .CommandButtonChecking.Caption = "受付計算"
+        .CommandButtonInspection.Caption = "点検"
+        .CommandButtonClosing.Caption = "締め処理"
         
         With .CommandButtonFront
             .Top = 40

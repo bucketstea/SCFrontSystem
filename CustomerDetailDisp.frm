@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} CustomerDetailDisp 
    Caption         =   "UserForm1"
-   ClientHeight    =   180
-   ClientLeft      =   -432
-   ClientTop       =   -1812
-   ClientWidth     =   420
+   ClientHeight    =   60
+   ClientLeft      =   -504
+   ClientTop       =   -2100
+   ClientWidth     =   204
    OleObjectBlob   =   "CustomerDetailDisp.frx":0000
    StartUpPosition =   1  'オーナー フォームの中央
 End
@@ -35,6 +35,11 @@ Private Const IDC_HAND = 32649
 Private Sub UserForm_Initialize()
     Call UiConfig_CustomerDetailDisp.configUiDesign(Me)
 End Sub
+Private Sub UserForm_Activate()
+    '編集画面からの戻り時に、0件になってしまうことがある(当該ユーザーの唯一のデータを削除した等)
+    'そのときは更にBackする
+    If Me.ListView1.ListItems.Count < 1 Then goBack
+End Sub
 
 Public Sub setupDetail(ByVal targetName As String, ByVal targetTel As String)
     
@@ -42,14 +47,16 @@ Public Sub setupDetail(ByVal targetName As String, ByVal targetTel As String)
     telVal = targetTel
     If nameVal = "" Or telVal = "" Then Exit Sub
     targetArr = quickSort2dByColumn(searchByNameAndTel(nameVal, telVal), COL_DATE, "DESC")
-    rootVal = targetArr(UBound(targetArr, 1), COL_ROOT)
-    
-    Me.TextBoxName.Text = nameVal
-    Me.TextBoxTel.Text = telVal
-    Me.LabelRootVal.Caption = rootVal
-    Me.LabelCtVal.Caption = UBound(targetArr, 1)
-    Me.LabelNgVal.Caption = joinStrByCol(targetArr, COL_NG)
-    Me.LabelNotesVal.Caption = joinStrByCol(targetArr, COL_NOTE)
+    If Not IsEmpty(targetArr) Then
+        rootVal = targetArr(UBound(targetArr, 1), COL_ROOT)
+        
+        Me.TextBoxName.Text = nameVal
+        Me.TextBoxTel.Text = telVal
+        Me.LabelRootVal.Caption = rootVal
+        Me.LabelCtVal.Caption = UBound(targetArr, 1)
+        Me.LabelNgVal.Caption = joinStrByCol(targetArr, COL_NG)
+        Me.LabelNotesVal.Caption = joinStrByCol(targetArr, COL_NOTE)
+    End If
     
     'ListViewクラス更新
     Set drawer = New ListViewDrawer
@@ -62,6 +69,7 @@ End Sub
 Private Function searchByNameAndTel(ByVal targetName As String, _
                                     ByVal targetTel As String) As Variant
     Dim arr As Variant: arr = DispMod.searchCustomerByNameAndTel(targetName, targetTel)
+    If IsEmpty(arr) Then Exit Function
     
     '日付列が文字列だとやっかい、一度数値化する
     Dim dateNormalizedArr As Variant: dateNormalizedArr = DispMod.normalizeDateCol(arr)

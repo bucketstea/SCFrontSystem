@@ -102,8 +102,8 @@ Private Sub LabelDate_Click()
     LabelDate.BorderColor = &H8000000F
     
     Dim strInput As String
-    Do: strInput = InputBox(prompt:="Please enter the date you want to view.", _
-                            Title:="Jump to date", _
+    Do: strInput = InputBox(prompt:="表示したい日付(yymmdd形式)を入力してください。", _
+                            Title:="日付ジャンプ", _
                             Default:=Format(Date, "yymmdd"))
         
         '閉じる、キャンセル時Exit

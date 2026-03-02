@@ -18,14 +18,14 @@ Private Sub configLabelName(HistoryDataDisp)
     With HistoryDataDisp
         .Caption = "履歴検索画面"
         .LabelTab1.Caption = "一覧データ"
-        .LabelTab2.Caption = "History"
-        .LabelTab3.Caption = "Checking"
-        .LabelTab4.Caption = "Inspection"
-        .LabelTab5.Caption = "Closing"
+        .LabelTab2.Caption = "履歴"
+        .LabelTab3.Caption = "受付計算"
+        .LabelTab4.Caption = "点検"
+        .LabelTab5.Caption = "締め処理"
         
         hitsCt = 0
         .LabelHits.Caption = hitsCt & " Hit　"
-        .LabelFree.Caption = "Freeword:"
+        .LabelFree.Caption = "フリーワード:"
         .CommandButtonSearch.Caption = "Search!"
     End With
 End Sub

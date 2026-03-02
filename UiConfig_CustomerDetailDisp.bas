@@ -16,15 +16,15 @@ Private Sub configLabelName(CustomerDetailDisp)
     With CustomerDetailDisp
         .Caption = "カスタマー詳細画面"
         
-        .LabelName.Caption = "Name:"
-        .LabelTel.Caption = "Tel:"
-        .LabelRoot.Caption = "Root:"
-        .LabelCt.Caption = "Ct:"
-        .LabelNg.Caption = "Ng:"
-        .LabelNotes.Caption = "Notes:"
+        .LabelName.Caption = "名前:"
+        .LabelTel.Caption = "電話番号:"
+        .LabelRoot.Caption = "経路:"
+        .LabelCt.Caption = "回数:"
+        .LabelNg.Caption = "NG:"
+        .LabelNotes.Caption = "備考:"
         
-        .CommandButtonAdd.Caption = "Add New"
-        .CommandButtonChange.Caption = "Change!"
+        .CommandButtonChange.Caption = "一括変更"
+        .CommandButtonAdd.Caption = "追加入力"
     End With
 End Sub
 Private Sub configSizePosition(CustomerDetailDisp)
