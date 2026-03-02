@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} InputFormDisp 
    Caption         =   "データ入力"
-   ClientHeight    =   3756
-   ClientLeft      =   -3252
-   ClientTop       =   -13296
-   ClientWidth     =   9528.001
+   ClientHeight    =   396
+   ClientLeft      =   -3408
+   ClientTop       =   -14220
+   ClientWidth     =   852
    OleObjectBlob   =   "InputFormDisp.frx":0000
    StartUpPosition =   1  'オーナー フォームの中央
 End
@@ -26,7 +26,7 @@ Private Const IDC_HAND = 32649
 '///////////////////////////////////////////////////////////
 
 Private isEditMode As Boolean
-Private generalid As String
+Private generalId As String
 Private preLoadData As Variant
 Private previousDisp As Object
 
@@ -54,16 +54,16 @@ Public Sub reloadInputs(ByVal targetDate As Variant, _
     ImageDelete.Visible = False
     Me.Caption = "新規データ入力画面"
     
-    Dim shLastRow As Long: shLastRow = InputSh.Cells(InputSh.Rows.Count, 1).End(xlUp).Row
-    generalid = shLastRow + 1
-    LabelEditId.Caption = "ID: " & listCt + 1 & "_" & generalid
+    Dim shLastRow As Long: shLastRow = InputSh.Cells(InputSh.Rows.Count, COL_DATE).End(xlUp).Row
+    generalId = DispMod.getNewId(shLastRow)
+    LabelEditId.Caption = "ID: " & listCt + 1 & "_" & generalId
     
     TextBoxDate.Text = Format(targetDate, "yymmdd")
     If targetName <> "" Then TextBoxName.Text = targetName
     If targetTel <> "" Then TextBoxTel.Text = targetTel
     
     'プライマリアクション(新規追加)ボタン
-    CommandButtonSave.Caption = "Add"
+    CommandButtonSave.Caption = "データ追加"
     CommandButtonSave.BackColor = RGB(68, 114, 196)
     
     '入力状態プリロード
@@ -80,15 +80,15 @@ Public Sub editInputs(ByVal listRow As Variant, _
     Call UiConfig_InputFormDisp.configUiDesign(Me)
     Call clearAllValue
     
-    generalid = id
+    generalId = id
     isEditMode = True
     Me.Caption = "既存データ編集画面"
     
     '選択レコードを入力欄に反映する
-    Call currentRecordToInputs(listRow, dailyId, generalid)
+    Call currentRecordToInputs(listRow, dailyId, generalId)
     
     'プライマリアクション(変更保存)ボタン
-    CommandButtonSave.Caption = "Save changes!"
+    CommandButtonSave.Caption = "変更保存"
     CommandButtonSave.BackColor = RGB(237, 125, 49)
     
     '入力状態プリロード
@@ -101,10 +101,10 @@ Public Sub editInputs(ByVal listRow As Variant, _
 End Sub
 
 'ListViewのレコードに基づいて入力欄各項目にデータを反映する
-Public Sub currentRecordToInputs(ByVal listRow As Variant, ByVal dailyId As Long, ByVal generalid As String)
+Public Sub currentRecordToInputs(ByVal listRow As Variant, ByVal dailyId As Long, ByVal generalId As String)
     With Me
         .ImageDelete.Visible = True
-        .LabelEditId.Caption = "ID: " & dailyId & "_" & generalid
+        .LabelEditId.Caption = "ID: " & dailyId & "_" & generalId
         .TextBoxDate.Text = listRow(COL_DATE)
         .ComboBoxAd.Text = listRow(COL_ROOT)
         .ComboBoxType.Text = listRow(COL_TYPE)
@@ -130,10 +130,10 @@ End Sub
 Private Function collectInputData() As Variant
     Dim Data(1 To COL_LAST) As Variant ' 列数に応じて変更
     
-    Data(COL_A) = generalid
-    Data(COL_COUNT) = ""
+    Data(COL_A) = generalId
+    Data(COL_COUNT) = DispMod.getCt(TextBoxName.Text, CStr(TextBoxTel.Text))
     Data(COL_DATE) = TextBoxDate.Text
-    Data(COL_NEW) = ""
+    Data(COL_NEW) = DispMod.isNew(Data(COL_COUNT))
     Data(COL_ROOT) = ComboBoxAd.Text
     Data(COL_TYPE) = ComboBoxType.Text
     Data(COL_STAFF) = TextBoxCast.Text
@@ -162,8 +162,8 @@ End Function
 Private Sub LabelBack_Click()
     Dim currentData As Variant: currentData = collectInputData()
     If Not isSame1dArr(preLoadData, currentData) Then
-        If (MsgBox("You have changes that haven't been saved yet." & vbCrLf & _
-                   "Would you like to back to the previous screen?", vbExclamation + vbYesNo, "Caution") = vbNo) Then
+        If (MsgBox("変更が保存されていません。" & vbCrLf & _
+                   "入力内容は破棄して、前の画面に戻りますか？", vbExclamation + vbYesNo, "Caution") = vbNo) Then
             Exit Sub
         End If
     End If
@@ -172,9 +172,9 @@ Private Sub LabelBack_Click()
     goBack
 End Sub
 Private Sub ImageDelete_Click()
-    If (MsgBox("Delete the data?", vbExclamation + vbYesNo, "Caution") = vbYes) Then
+    If (MsgBox("このデータを削除してよろしいですか?", vbExclamation + vbYesNo, "Caution") = vbYes) Then
         
-        Dim targetRow As Long: targetRow = searchRowIndex(generalid)
+        Dim targetRow As Long: targetRow = searchRowIndex(generalId)
         
         '_del付与(削除レコード化する)
         Call delToExcel(targetRow)
@@ -204,7 +204,7 @@ Private Sub CommandButtonSave_Click()
     newRow = collectInputData()
     
     'Excelに1行追記
-    Dim targetRow As Long: targetRow = searchRowIndex(generalid)
+    Dim targetRow As Long: targetRow = searchRowIndex(generalId)
     Call writeToExcel(newRow, targetRow)
     
     Dim selectedDate As Date: selectedDate = CDate(parseYymmdd(Me.TextBoxDate.value))
@@ -214,14 +214,18 @@ Private Sub CommandButtonSave_Click()
     Call CustomerDetailDisp.setupDetail(newRow(COL_CUSTM), newRow(COL_TEL)) '名前と番号で履歴詳細画面のListView更新
     Call HistoryDataDisp.api_searchHistory(HistoryDataDisp.TextBoxFree.Text)
     
-    '入力画面を閉じ、前の画面に戻る
+    '入力画面を閉じ、一覧データ画面へ
     Me.Hide
-    goBack
+    If isEditMode Then
+        goBack
+    Else
+        navigateTo FrontDataDisp
+    End If
 End Sub
 Private Function searchRowIndex(ByVal editID As String) As Long
     With InputSh
         If Not isEditMode Then
-            searchRowIndex = .Cells(.Rows.Count, 1).End(xlUp).Row + 1
+            searchRowIndex = .Cells(.Rows.Count, COL_DATE).End(xlUp).Row + 1
             Exit Function
         End If
         
@@ -383,7 +387,7 @@ Private Sub writeToExcel(ByVal Data As Variant, ByVal targetRow As Long)
     
     If InputSh.ProtectContents Then InputSh.Unprotect "042595"
     
-    InputSh.Range(InputSh.Cells(targetRow, 1), InputSh.Cells(targetRow, UBound(Data))).value = Data
+    InputSh.Range(InputSh.Cells(targetRow, COL_A), InputSh.Cells(targetRow, UBound(Data))).value = Data
     
     'Telが0始まりで崩れる。配列データはCstrしているが、念のためセルの表示形式でも文字列に設定。
     InputSh.Cells(targetRow, COL_TEL).NumberFormat = "@"
@@ -395,9 +399,15 @@ End Sub
 Private Sub delToExcel(ByVal targetRow As Long)
     If InputSh.ProtectContents Then InputSh.Unprotect "042595"
     
-    InputSh.Cells(targetRow, COL_A).value = InputSh.Cells(targetRow, COL_A).value & "_del"
-    InputSh.Cells(targetRow, COL_DATE).value = InputSh.Cells(targetRow, COL_DATE).value & "_del"
-    ThisWorkbook.Save 'ブック保存しておく
+    
+    'リリース初期の移行期間は、後方互換性のため"_del"付与でなく、実際に行ごと削除する
+    '（おそらく締め処理などで論理削除行に対応する改修が必要）
+    '完全移行後に"_del"付与論理削除と、それに対応する改修を行う
+'    InputSh.Cells(targetRow, COL_A).value = InputSh.Cells(targetRow, COL_A).value & "_del"
+    InputSh.Rows(targetRow).Delete
+    
+    'ブック保存しておく
+    ThisWorkbook.Save
     
     If Not InputSh.ProtectContents Then InputSh.Protect "042595"
 End Sub

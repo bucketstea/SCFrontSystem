@@ -17,10 +17,10 @@ Private Sub configLabelName(Disp)
     With Disp
         .Caption = "計算画面"
         .LabelTab1.Caption = "一覧データ"
-        .LabelTab2.Caption = "History"
-        .LabelTab3.Caption = "Checking"
-        .LabelTab4.Caption = "Inspection"
-        .LabelTab5.Caption = "Closing"
+        .LabelTab2.Caption = "履歴"
+        .LabelTab3.Caption = "受付計算"
+        .LabelTab4.Caption = "点検"
+        .LabelTab5.Caption = "締め処理"
         
         .CommandButton1.Caption = "Check-in"
     End With
